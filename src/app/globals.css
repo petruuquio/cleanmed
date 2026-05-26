@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-error: #b83230;
+  --color-surface-container-high: #eae6de;
+  --color-surface-bright: #faf6f0;
+  --color-on-tertiary-fixed: #221a05;
+  --color-inverse-primary: #8ecf9e;
+  --color-on-primary-fixed: #002110;
+  --color-tertiary-container: #c4a66a;
+  --color-surface-container-low: #f5f1ea;
+  --color-surface-tint: #4a7c59;
+  --color-primary-container: #78a886;
+  --color-on-error-container: #690005;
+  --color-tertiary-fixed-dim: #dcc48e;
+  --color-on-surface-variant: #4a4e4a;
+  --color-surface-container: #f0ece4;
+  --color-on-secondary-fixed-variant: #4a4538;
+  --color-surface: #faf6f0;
+  --color-on-tertiary-container: #554020;
+  --color-on-tertiary-fixed-variant: #554020;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #2e3230;
+  --color-background: #faf6f0;
+  --color-tertiary: #705c30;
+  --color-secondary-fixed-dim: #d4ccbf;
+  --color-secondary-fixed: #f0e8db;
+  --color-secondary: #6b6358;
+  --color-on-primary-container: #d8f0de;
+  --color-outline-variant: #c4c8bc;
+  --color-on-secondary-container: #5e5548;
+  --color-error-container: #ffdad8;
+  --color-primary-fixed: #c8e8d0;
+  --color-primary-fixed-dim: #8ecf9e;
+  --color-surface-dim: #dbd7cf;
+  --color-on-primary-fixed-variant: #2a6038;
+  --color-secondary-container: #f0e8db;
+  --color-surface-variant: #e4e0d8;
+  --color-on-primary: #ffffff;
+  --color-surface-container-highest: #e4e0d8;
+  --color-inverse-surface: #2e3230;
+  --color-primary: #4a7c59;
+  --color-on-background: #2e3230;
+  --color-on-tertiary: #ffffff;
+  --color-on-error: #ffffff;
+  --color-on-secondary: #ffffff;
+  --color-tertiary-fixed: #f8e0a8;
+  --color-inverse-on-surface: #f5f0e8;
+  --color-outline: #74796e;
+  --color-on-secondary-fixed: #1e1a13;
+
+  --radius-DEFAULT: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --font-headline: var(--font-literata), serif;
+  --font-display: var(--font-literata), serif;
+  --font-body: var(--font-nunito-sans), sans-serif;
+  --font-label: var(--font-nunito-sans), sans-serif;
+}
+
+body {
+  @apply bg-background text-on-surface font-body antialiased;
+}

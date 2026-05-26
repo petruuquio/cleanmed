@@ -1,0 +1,16 @@
+model Medic {
+    id           String        @id @default(uuid())
+    name         String
+    email        String        @unique
+    phone        String
+    password     String
+    document     String        @unique
+    crm          String        @unique
+    specialty    String
+    room         String
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    appointments Appointment[]
+
+    @@map("medics")
+}

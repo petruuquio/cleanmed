@@ -1,0 +1,23 @@
+enum AppointmentStatus {
+    PENDING
+    CONFIRMED
+    CANCELLED
+    COMPLETED
+}
+
+model Appointment {
+    id          String            @id @default(uuid())
+    dateTime    DateTime
+    status      AppointmentStatus @default(PENDING)
+    patientId   String
+    patient     Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    medicId     String
+    medic       Medic             @relation(fields: [medicId], references: [id], onDelete: Restrict)
+    paymentId   String            @unique
+    payment     Payment           @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+    attachments Attachment[]
+    createdAt   DateTime          @default(now())
+    updatedAt   DateTime          @updatedAt
+
+    @@map("appointments")
+}

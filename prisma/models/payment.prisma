@@ -1,0 +1,29 @@
+enum PaymentStatus {
+    PENDING
+    PAID
+    REFUNDED
+    FAILED
+}
+
+enum PaymentMethod {
+    CASH
+    CREDIT_CARD
+    DEBIT_CARD
+    PIX
+    HEALTH_INSURANCE
+}
+
+model Payment {
+    id          String        @id @default(uuid())
+    amount      Decimal       @db.Decimal(10, 2)
+    status      PaymentStatus @default(PENDING)
+    method      PaymentMethod
+    paidAt      DateTime?
+    appointment Appointment?
+    patientId   String
+    patient     Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+
+    @@map("payments")
+}

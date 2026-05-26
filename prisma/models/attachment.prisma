@@ -1,0 +1,23 @@
+enum AttachmentType {
+    PRESCRIPTION
+    EXAM_REQUEST
+    MEDICAL_CERTIFICATE
+    RECEIPT
+    OTHER
+}
+
+model Attachment {
+    id            String         @id @default(uuid())
+    title         String
+    type          AttachmentType @default(OTHER)
+    content       String?        @db.Text
+    fileUrl       String?
+    patientId     String
+    patient       Patient        @relation(fields: [patientId], references: [id], onDelete: Cascade)
+    appointmentId String?
+    appointment   Appointment?   @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+
+    @@map("attachments")
+}
