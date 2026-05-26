@@ -30,6 +30,7 @@ export class AppointmentRepository {
       // Create an empty pending payment by default
       const payment = await tx.payment.create({
         data: {
+          patientId: data.patientId,
           amount: 0,
           status: "PENDING",
           method: "CASH",
