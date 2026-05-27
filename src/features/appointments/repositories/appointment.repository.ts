@@ -74,10 +74,21 @@ export class AppointmentRepository {
   }
 
   async delete(id: string) {
-    // Payment deletion will cascade according to schema, but we can do it explicitly to be safe
-    // Prisma model: payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-    return prisma.appointment.delete({
-      where: { id },
+    const appointment = await prisma.appointment.findUnique({ where: { id } });
+    if (!appointment) throw new Error("Consulta não encontrada.");
+
+    return prisma.$transaction(async (tx) => {
+      const deletedAppointment = await tx.appointment.delete({
+        where: { id },
+      });
+
+      if (deletedAppointment.paymentId) {
+        await tx.payment.delete({
+          where: { id: deletedAppointment.paymentId },
+        });
+      }
+
+      return deletedAppointment;
     });
   }
 }
