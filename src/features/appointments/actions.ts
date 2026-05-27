@@ -22,7 +22,9 @@ export async function createAppointmentAction(data: AppointmentFormValues) {
     const validatedData = appointmentSchema.parse(data);
     const appointment = await createUseCase.execute(validatedData);
     
-    revalidatePath("/dashboard/consultas");
+    revalidatePath("/dashboard/consultas", "layout");
+    revalidatePath("/dashboard/agenda", "layout");
+    revalidatePath("/portal", "layout");
     return actionSuccess(appointment, "Consulta agendada com sucesso.");
   } catch (error: any) {
     if (error instanceof AppError) {
@@ -37,7 +39,9 @@ export async function updateAppointmentAction(id: string, data: UpdateAppointmen
     const validatedData = updateAppointmentSchema.parse(data);
     const appointment = await updateUseCase.execute(id, validatedData);
     
-    revalidatePath("/dashboard/consultas");
+    revalidatePath("/dashboard/consultas", "layout");
+    revalidatePath("/dashboard/agenda", "layout");
+    revalidatePath("/portal", "layout");
     return actionSuccess(appointment, "Consulta atualizada com sucesso.");
   } catch (error: any) {
     if (error instanceof AppError) {
@@ -51,7 +55,9 @@ export async function deleteAppointmentAction(id: string) {
   try {
     await deleteUseCase.execute(id);
     
-    revalidatePath("/dashboard/consultas");
+    revalidatePath("/dashboard/consultas", "layout");
+    revalidatePath("/dashboard/agenda", "layout");
+    revalidatePath("/portal", "layout");
     return actionSuccess(null, "Consulta cancelada/excluída com sucesso.");
   } catch (error: any) {
     if (error instanceof AppError) {
@@ -68,8 +74,9 @@ export async function updateAppointmentStatusAction(id: string, status: any) {
       data: { status }
     });
     
-    revalidatePath("/dashboard/consultas");
-    revalidatePath("/dashboard/agenda");
+    revalidatePath("/dashboard/consultas", "layout");
+    revalidatePath("/dashboard/agenda", "layout");
+    revalidatePath("/portal", "layout");
     return actionSuccess(appointment, `Status atualizado para ${status}`);
   } catch (error: any) {
     return actionError("Erro ao atualizar status da consulta.");

@@ -102,7 +102,9 @@ export async function bookPortalAppointmentAction(data: { specialty: string, med
       };
     });
 
-    revalidatePath("/portal");
+    revalidatePath("/portal", "layout");
+    revalidatePath("/dashboard/consultas");
+    revalidatePath("/dashboard/agenda");
     return actionSuccess(result);
   } catch (error) {
     console.error(error);
@@ -129,7 +131,10 @@ export async function payPortalAppointmentAction(paymentId: string, method: stri
       data: { status: "PENDING" }
     });
 
-    revalidatePath("/portal");
+    revalidatePath("/portal", "layout");
+    revalidatePath("/dashboard/consultas");
+    revalidatePath("/dashboard/agenda");
+    revalidatePath("/dashboard/pagamentos");
     return actionSuccess({
       ...payment,
       amount: Number(payment.amount)
