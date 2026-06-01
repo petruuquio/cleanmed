@@ -200,12 +200,12 @@ export function PatientOverview({ patient }: PatientOverviewProps) {
           ) : (
             patient.attachments.map((att: any) => (
               <div key={att.id} className="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-5 flex items-center justify-between shadow-sm hover:border-primary/50 transition-colors group">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 flex-1 overflow-hidden mr-2">
                   <div className="w-10 h-10 rounded-lg bg-secondary-container/50 text-secondary-fixed-dim flex items-center justify-center shrink-0">
                     <FileText size={20} />
                   </div>
-                  <div className="overflow-hidden">
-                    <h4 className="font-bold text-on-surface text-sm truncate">{att.title}</h4>
+                  <div className="overflow-hidden flex-1">
+                    <h4 className="font-bold text-on-surface text-sm truncate max-w-[120px] sm:max-w-[200px]" title={att.title}>{att.title}</h4>
                     <p className="text-xs text-on-surface-variant">
                       Enviado em {new Date(att.createdAt).toLocaleDateString("pt-BR")} • {att.type}
                     </p>

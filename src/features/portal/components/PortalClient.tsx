@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Plus, CalendarDays, Clock, Receipt, Paperclip, Download, Hospital, Activity, Heart, Pill, Weight, ChevronLeft, ChevronRight, CalendarOff, LogOut } from "lucide-react";
+import { Plus, CalendarDays, Clock, Receipt, Paperclip, Download, Hospital, Activity, Heart, Pill, Weight, ChevronLeft, ChevronRight, CalendarOff, LogOut, Eye } from "lucide-react";
 import { PortalBookingModal } from "./PortalBookingModal";
 import { signOut } from "next-auth/react";
 import { PortalPaymentModal } from "./PortalPaymentModal";
@@ -75,6 +75,24 @@ export function PortalClient({ patient, medics }: PortalClientProps) {
       console.error(e);
     }
     setIsPaymentOpen(false);
+  };
+
+  const handleDownloadFile = (e: React.MouseEvent, base64Data: string, filename: string) => {
+    e.stopPropagation();
+    const a = document.createElement("a");
+    a.href = base64Data;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const handleViewFile = (e: React.MouseEvent, base64Data: string) => {
+    e.stopPropagation();
+    const newWindow = window.open();
+    if (newWindow) {
+      newWindow.document.write(`<iframe src="${base64Data}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`);
+    }
   };
 
   return (
@@ -364,17 +382,32 @@ export function PortalClient({ patient, medics }: PortalClientProps) {
                     <p className="p-4 text-sm text-on-surface-variant">Nenhum anexo encontrado.</p>
                   ) : attachments.map((att: any) => (
                     <div key={att.id} className="p-4 hover:bg-surface-container-lowest/50 transition-colors group cursor-pointer flex justify-between items-center">
-                      <div>
-                        <span className="font-bold text-on-surface text-sm block group-hover:text-primary transition-colors">{att.title}</span>
+                      <div className="overflow-hidden flex-1 mr-4">
+                        <span className="font-bold text-on-surface text-sm block group-hover:text-primary transition-colors truncate max-w-[150px] sm:max-w-[250px]" title={att.title}>{att.title}</span>
                         <div className="flex items-center gap-2 mt-1">
                           <p className="text-xs text-on-surface-variant/70">{new Date(att.createdAt).toLocaleDateString('pt-BR')}</p>
                           <span className="text-xs text-on-surface-variant/40">•</span>
                           <p className="text-xs text-on-surface-variant/70">{att.type}</p>
                         </div>
                       </div>
-                      <Button variant="ghost" className="w-8 h-8 p-0 rounded-full text-on-surface-variant group-hover:text-primary group-hover:bg-primary/10">
-                        <Download size={16} />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={(e) => att.content && handleViewFile(e, att.content)}
+                          variant="ghost" 
+                          title="Visualizar arquivo"
+                          className="w-8 h-8 p-0 rounded-full text-on-surface-variant hover:text-primary hover:bg-primary/10"
+                        >
+                          <Eye size={16} />
+                        </Button>
+                        <Button 
+                          onClick={(e) => att.content && handleDownloadFile(e, att.content, att.title)}
+                          variant="ghost" 
+                          title="Baixar arquivo"
+                          className="w-8 h-8 p-0 rounded-full text-on-surface-variant hover:text-primary hover:bg-primary/10"
+                        >
+                          <Download size={16} />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
