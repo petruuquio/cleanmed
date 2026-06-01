@@ -77,9 +77,13 @@ export function PatientsTable({ patients, onEdit, onDelete }: PatientsTableProps
               >
                 <td className="p-4 pl-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full border border-outline-variant/20 bg-primary/10 flex items-center justify-center text-primary font-bold">
-                      {patient.name.charAt(0)}
-                    </div>
+                    {patient.avatarUrl ? (
+                      <img src={patient.avatarUrl} alt={patient.name} className="w-10 h-10 rounded-full object-cover border border-outline-variant/20 shadow-sm" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full border border-outline-variant/20 bg-primary/10 flex items-center justify-center text-primary font-bold">
+                        {patient.name.charAt(0)}
+                      </div>
+                    )}
                     <div>
                       <div className="font-bold text-on-surface">
                         {patient.name}

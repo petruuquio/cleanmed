@@ -99,9 +99,13 @@ export function PortalClient({ patient, medics }: PortalClientProps) {
             </Button>
             <div className="flex items-center gap-3 border-l border-primary-fixed-dim/20 pl-6">
               <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-                <div className="w-10 h-10 rounded-full bg-primary/20 text-surface-bright flex items-center justify-center font-bold text-sm ring-1 ring-surface-bright/30 uppercase">
-                  {patient.name.substring(0, 2)}
-                </div>
+                {patient.avatarUrl ? (
+                  <img src={patient.avatarUrl} alt={patient.name} className="w-10 h-10 rounded-full object-cover ring-1 ring-surface-bright/30 shadow-sm" />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-primary/20 text-surface-bright flex items-center justify-center font-bold text-sm ring-1 ring-surface-bright/30 uppercase">
+                    {patient.name.substring(0, 2)}
+                  </div>
+                )}
                 <div className="hidden md:block text-left">
                   <p className="text-sm font-bold text-surface-bright leading-tight">{patient.name}</p>
                   <p className="text-xs text-surface-variant/70 leading-tight">Minha Conta</p>

@@ -10,7 +10,8 @@ import {
   ChevronRight,
   Plus,
   Upload,
-  Loader2
+  Loader2,
+  Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { uploadPatientPhotoAction, uploadPatientAttachmentAction } from "../actions";
@@ -85,6 +86,13 @@ export function PatientOverview({ patient }: PatientOverviewProps) {
     document.body.removeChild(a);
   };
 
+  const handleViewFile = (base64Data: string) => {
+    const newWindow = window.open();
+    if (newWindow) {
+      newWindow.document.write(`<iframe src="${base64Data}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`);
+    }
+  };
+
   const fallbackAvatar = "https://ui-avatars.com/api/?name=" + encodeURIComponent(patient.name) + "&background=random";
 
   return (
@@ -148,37 +156,6 @@ export function PatientOverview({ patient }: PatientOverviewProps) {
         </div>
       </div>
 
-      {/* SINAIS VITAIS - FAKE (Apenas UI ilustrativa) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
-        <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center gap-2 text-on-surface-variant font-bold text-sm tracking-wide mb-4">
-            <Heart size={18} />
-            FREQ. CARDÍACA
-          </div>
-          <div className="flex items-baseline gap-2 mb-4">
-            <span className="text-4xl font-headline font-bold text-on-surface">--</span>
-            <span className="text-on-surface-variant font-medium">bpm</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-on-surface-variant">Não registrado</span>
-          </div>
-        </div>
-
-        <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center gap-2 text-on-surface-variant font-bold text-sm tracking-wide mb-4">
-            <Activity size={18} />
-            PRESSÃO ARTERIAL
-          </div>
-          <div className="flex items-baseline gap-2 mb-4">
-            <span className="text-4xl font-headline font-bold text-on-surface">--/--</span>
-            <span className="text-on-surface-variant font-medium">mmHg</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-on-surface-variant">Não registrado</span>
-          </div>
-        </div>
-      </div>
-
       {/* HISTÓRICO DE CONSULTAS */}
       <div className="mt-6 flex flex-col gap-4">
         <h2 className="text-xl font-headline font-bold text-on-surface px-1">Histórico de Consultas</h2>
@@ -222,7 +199,7 @@ export function PatientOverview({ patient }: PatientOverviewProps) {
             <p className="text-sm text-on-surface-variant px-1">Nenhum arquivo anexado.</p>
           ) : (
             patient.attachments.map((att: any) => (
-              <div key={att.id} onClick={() => att.content && handleDownloadFile(att.content, att.title)} className="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-5 flex items-center justify-between shadow-sm hover:border-primary/50 transition-colors group cursor-pointer">
+              <div key={att.id} className="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-5 flex items-center justify-between shadow-sm hover:border-primary/50 transition-colors group">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-lg bg-secondary-container/50 text-secondary-fixed-dim flex items-center justify-center shrink-0">
                     <FileText size={20} />
@@ -234,8 +211,21 @@ export function PatientOverview({ patient }: PatientOverviewProps) {
                     </p>
                   </div>
                 </div>
-                <div className="text-on-surface-variant group-hover:text-primary transition-colors p-2">
-                  <Download size={20} />
+                <div className="flex gap-2">
+                  <div 
+                    onClick={() => att.content && handleViewFile(att.content)}
+                    className="text-on-surface-variant group-hover:text-primary transition-colors p-2 cursor-pointer hover:bg-primary/10 rounded-full"
+                    title="Visualizar arquivo"
+                  >
+                    <Eye size={20} />
+                  </div>
+                  <div 
+                    onClick={() => att.content && handleDownloadFile(att.content, att.title)}
+                    className="text-on-surface-variant group-hover:text-primary transition-colors p-2 cursor-pointer hover:bg-primary/10 rounded-full"
+                    title="Baixar arquivo"
+                  >
+                    <Download size={20} />
+                  </div>
                 </div>
               </div>
             ))
