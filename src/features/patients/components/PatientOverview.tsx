@@ -13,7 +13,7 @@ import {
   Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { uploadPatientPhotoAction, uploadPatientAttachmentAction } from "../../actions";
+import { uploadPatientPhotoAction, uploadPatientAttachmentAction } from "../actions";
 
 interface PatientOverviewProps {
   patient: any;
@@ -22,7 +22,7 @@ interface PatientOverviewProps {
 export function PatientOverview({ patient }: PatientOverviewProps) {
   const [isUploadingPhoto, setIsUploadingPhoto] = React.useState(false);
   const [isUploadingFile, setIsUploadingFile] = React.useState(false);
-  
+
   const photoInputRef = React.useRef<HTMLInputElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -31,7 +31,7 @@ export function PatientOverview({ patient }: PatientOverviewProps) {
     if (!birthDate) return "Não informada";
     const dob = new Date(birthDate);
     const diff_ms = Date.now() - dob.getTime();
-    const age_dt = new Date(diff_ms); 
+    const age_dt = new Date(diff_ms);
     return Math.abs(age_dt.getUTCFullYear() - 1970) + " anos";
   };
 
