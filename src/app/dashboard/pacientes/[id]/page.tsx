@@ -1,5 +1,6 @@
 import * as React from "react";
 import { PatientOverview } from "@/features/patients/components/PatientOverview";
+import { getPatientDetailsAction } from "@/features/patients/actions";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -11,8 +12,20 @@ interface PageProps {
 
 export default async function PatientOverviewPage({ params }: PageProps) {
   const { id } = await params;
-  // O id do paciente está disponível em id para buscar no backend
-  // Por enquanto, o PatientOverview utiliza dados mockados baseados no layout
+  
+  const res = await getPatientDetailsAction(id);
+  if (!res.success || !res.data) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12">
+        <h2 className="text-xl font-bold text-error">Paciente não encontrado</h2>
+        <Link href="/dashboard/pacientes" className="text-primary mt-4 hover:underline">
+          Voltar para a lista
+        </Link>
+      </div>
+    );
+  }
+
+  const patient = res.data;
 
   return (
     <>
@@ -24,7 +37,7 @@ export default async function PatientOverviewPage({ params }: PageProps) {
           <ChevronLeft size={16} /> Voltar para Pacientes
         </Link>
       </div>
-      <PatientOverview patientId={id} />
+      <PatientOverview patient={patient} />
     </>
   );
 }

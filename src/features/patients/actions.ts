@@ -1,5 +1,7 @@
 "use server";
 
+import { prisma } from "@/lib/prisma";
+
 import { revalidatePath } from "next/cache";
 import { patientSchema, PatientFormValues, updatePatientSchema, UpdatePatientFormValues } from "./schemas";
 import { PatientRepository } from "./repositories/patient.repository";
@@ -66,5 +68,64 @@ export async function getPatientsAction() {
     return actionSuccess(patients);
   } catch (error: any) {
     return actionError("Erro ao buscar pacientes.");
+  }
+}
+
+export async function getPatientDetailsAction(id: string) {
+  try {
+    const patient = await prisma.patient.findUnique({
+      where: { id },
+      include: {
+        appointments: {
+          orderBy: { dateTime: "desc" },
+          include: {
+            medic: true,
+          }
+        },
+        attachments: {
+          orderBy: { createdAt: "desc" }
+        }
+      }
+    });
+
+    if (!patient) {
+      return actionError("Paciente não encontrado.");
+    }
+
+    return actionSuccess(patient);
+  } catch (error: any) {
+    return actionError("Erro ao carregar os detalhes do paciente.");
+  }
+}
+
+export async function uploadPatientPhotoAction(id: string, base64: string) {
+  try {
+    const patient = await prisma.patient.update({
+      where: { id },
+      data: { avatarUrl: base64 }
+    });
+    
+    revalidatePath(`/dashboard/pacientes/${id}`);
+    return actionSuccess(patient, "Foto atualizada com sucesso.");
+  } catch (error: any) {
+    return actionError("Erro ao atualizar a foto de perfil.");
+  }
+}
+
+export async function uploadPatientAttachmentAction(data: { patientId: string, title: string, fileData: string, type?: any }) {
+  try {
+    const attachment = await prisma.attachment.create({
+      data: {
+        title: data.title,
+        content: data.fileData,
+        type: data.type || "OTHER",
+        patientId: data.patientId
+      }
+    });
+    
+    revalidatePath(`/dashboard/pacientes/${data.patientId}`);
+    return actionSuccess(attachment, "Arquivo enviado com sucesso.");
+  } catch (error: any) {
+    return actionError("Erro ao enviar o arquivo.");
   }
 }
